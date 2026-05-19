@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <title>Dig World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#1a1a1a" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="loading" class="overlay">
+    <div class="card">
+      <h1>Dig World</h1>
+      <p>Воксельный мир. Копай, ищи руды, отбивайся от монстров. Игра по сети через хотспот.</p>
+      <label>Имя:
+        <input id="nameInput" maxlength="20" autocomplete="off" placeholder="Игрок" />
+      </label>
+      <button id="startBtn">Играть</button>
+      <p class="hint">Подсказка: на телефоне поверни в альбомную ориентацию. Левый стик — ходьба, справа экран — обзор, кнопки внизу справа — прыжок и копать.</p>
+    </div>
+  </div>
+
+  <canvas id="game"></canvas>
+
+  <!-- Screen-space crosshair so the player has a clear aim indicator
+       without needing a world-space ghost-cube outline. -->
+  <div id="crosshair" class="hidden" aria-hidden="true"></div>
+
+  <div id="hud" class="hidden">
+    <div id="hud-top">
+      <div id="hp">HP: <span id="hpVal">20</span></div>
+      <div id="coins">Монеты: <span id="coinsVal">0</span></div>
+      <div id="tool">Инструмент: <span id="toolName">Кирка</span></div>
+      <div id="depth">Глубина: <span id="depthVal">0</span></div>
+    </div>
+    <div id="hud-flash"></div>
+    <div id="hud-chat"></div>
+    <div id="hud-buttons">
+      <button id="btnInv">Инв.</button>
+      <button id="btnShop">Магазин</button>
+      <button id="btnSwap">Лопата/Кирка</button>
+      <button id="btnChat">Чат</button>
+    </div>
+  </div>
+
+  <div id="touch" class="hidden">
+    <div id="stick"><div id="stickKnob"></div></div>
+    <div id="actions">
+      <button id="btnJump" class="action">Прыжок</button>
+      <button id="btnDig" class="action big">Копать</button>
+      <button id="btnPlace" class="action">Положить</button>
+    </div>
+  </div>
+
+  <div id="invModal" class="modal hidden">
+    <div class="card">
+      <h2>Инвентарь</h2>
+      <ul id="invList"></ul>
+      <button class="closeBtn">Закрыть</button>
+    </div>
+  </div>
+
+  <div id="shopModal" class="modal hidden">
+    <div class="card">
+      <h2>Магазин</h2>
+      <p class="hint">Подойди ближе к торговцу (золотой блок).</p>
+      <h3>Продать руды</h3>
+      <ul id="sellList"></ul>
+      <h3>Улучшить инструменты</h3>
+      <ul id="upgradeList"></ul>
+      <button class="closeBtn">Закрыть</button>
+    </div>
+  </div>
+
+  <div id="chatModal" class="modal hidden">
+    <div class="card">
+      <h2>Чат</h2>
+      <div id="chatLog"></div>
+      <form id="chatForm">
+        <input id="chatInput" maxlength="200" placeholder="Сообщение..." autocomplete="off" />
+        <button type="submit">Отправить</button>
+      </form>
+      <button class="closeBtn">Закрыть</button>
+    </div>
+  </div>
+
+  <div id="deathOverlay" class="overlay hidden">
+    <div class="card">
+      <h1>Тебя убили</h1>
+      <button id="respawnBtn">Возродиться</button>
+    </div>
+  </div>
+
+  <script src="/lib/three.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>

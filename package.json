@@ -1,0 +1,20 @@
+{
+  "name": "dig-world",
+  "version": "0.1.0",
+  "private": true,
+  "description": "3D воксельный мир с мультиплеером по локальной сети (хотспот). Копаем землю, ищем шахты, добываем руды, покупаем лучшие инструменты, отбиваемся от монстров.",
+  "main": "server/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "check": "node --check server/index.js && node --check server/world.js && node --check server/game.js && node --check server/mob.js && node --check server/noise.js && node --check server/constants.js && node --check server/persistence.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
