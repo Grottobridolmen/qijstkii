@@ -1,0 +1,269 @@
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; padding: 0;
+  width: 100%; height: 100%;
+  background: #1a1a1a;
+  color: #eee;
+  font-family: system-ui, -apple-system, sans-serif;
+  overflow: hidden;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#game {
+  position: fixed;
+  inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+
+.hidden { display: none !important; }
+
+/* Center-screen aiming crosshair. A small "+" so it can't be mistaken
+   for any in-world block. */
+#crosshair {
+  position: fixed;
+  top: 50%; left: 50%;
+  width: 24px; height: 24px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 15;
+  opacity: 0.85;
+}
+#crosshair::before, #crosshair::after {
+  content: '';
+  position: absolute;
+  background: #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.7);
+}
+#crosshair::before {
+  /* horizontal bar */
+  top: 50%; left: 0; right: 0;
+  height: 2px;
+  transform: translateY(-50%);
+}
+#crosshair::after {
+  /* vertical bar */
+  left: 50%; top: 0; bottom: 0;
+  width: 2px;
+  transform: translateX(-50%);
+}
+
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(10, 10, 10, 0.85);
+  z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+}
+
+.card {
+  background: #222;
+  border: 1px solid #444;
+  border-radius: 12px;
+  padding: 20px;
+  width: min(420px, 100%);
+  max-height: 90vh;
+  overflow: auto;
+}
+
+.card h1, .card h2 { margin-top: 0; }
+.hint { color: #aaa; font-size: 13px; }
+
+input, button {
+  font-family: inherit;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #555;
+  background: #333;
+  color: #eee;
+}
+button {
+  cursor: pointer;
+  background: #2a6;
+  border-color: #194;
+}
+button:active { background: #194; }
+
+label { display: block; margin: 8px 0; }
+
+/* HUD */
+#hud {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  font-size: 14px;
+}
+#hud-top {
+  position: absolute;
+  top: 8px; left: 8px; right: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  pointer-events: auto;
+}
+#hud-top > div {
+  background: rgba(0,0,0,0.5);
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+#hud-flash {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -100%);
+  background: rgba(0,0,0,0.6);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 16px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  text-align: center;
+}
+#hud-flash.show { opacity: 1; }
+
+#hud-chat {
+  position: absolute;
+  bottom: 180px; left: 8px;
+  width: min(380px, 60%);
+  max-height: 40vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 2px;
+  pointer-events: none;
+}
+#hud-chat .msg {
+  background: rgba(0,0,0,0.5);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+#hud-buttons {
+  position: absolute;
+  top: 8px; right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  pointer-events: auto;
+}
+#hud-buttons button {
+  padding: 6px 10px;
+  font-size: 13px;
+  background: rgba(50,50,50,0.8);
+  border-color: #555;
+}
+
+/* Touch controls */
+#touch {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+#stick {
+  position: absolute;
+  left: 30px;
+  bottom: 30px;
+  width: 130px; height: 130px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.2);
+  pointer-events: auto;
+  touch-action: none;
+}
+#stickKnob {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.25);
+  pointer-events: none;
+}
+
+#actions {
+  position: absolute;
+  right: 20px;
+  bottom: 30px;
+  display: grid;
+  grid-template-columns: 90px 110px;
+  grid-template-rows: 90px 90px;
+  gap: 10px;
+  pointer-events: auto;
+}
+#actions .action {
+  width: 90px;
+  height: 90px;
+  font-size: 14px;
+  padding: 0;
+  background: rgba(50,50,50,0.7);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 50%;
+  color: #fff;
+}
+#actions .action.big {
+  width: 110px;
+  height: 110px;
+  font-size: 16px;
+  background: rgba(220, 90, 40, 0.7);
+  border-color: rgba(255, 180, 120, 0.4);
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+}
+#actions .action:active { background: rgba(255, 200, 100, 0.6); }
+
+/* Modal */
+.modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  pointer-events: auto;
+}
+.modal ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+.modal li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  border-bottom: 1px solid #333;
+}
+.modal li:last-child { border-bottom: none; }
+
+#chatLog {
+  background: #111;
+  padding: 8px;
+  height: 200px;
+  overflow-y: auto;
+  margin: 8px 0;
+  border-radius: 4px;
+}
+#chatLog .msg { font-size: 13px; margin: 2px 0; }
+#chatForm { display: flex; gap: 6px; }
+#chatForm input { flex: 1; }
+
+.closeBtn {
+  margin-top: 12px;
+  width: 100%;
+}
+
+/* On desktop or wide screens, hide touch UI by default; keep HUD. */
+@media (hover: hover) and (pointer: fine) {
+  #touch { display: none; }
+}
